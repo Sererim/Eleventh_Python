@@ -5,26 +5,19 @@
 # (time.time)
 
 from datetime import datetime
+from getpass import getuser
 
 class MyStr(str):
     """Simple extension of an inbuilt class str.
     Adds time of creation of str and username.
     """
-    def __init__(self, word: str) -> None:
-        super().__init__()
-        self.word = word
-        self.time = datetime.now()
-        
-    def get_user_name(self, username: str) -> None:
-        self.name = username
+    def __new__(cls, string):
+        instance = super().__new__(cls, string)
+        instance.name = getuser()
+        instance.time = datetime.now()
+        return instance
     
-    def __str__(self) -> str:
-        if self.name is None:
-            return f"Error!\nYou must enter a username."
-        return f"Username: {self.name}\nTime: {self.time}\n{self.word}"
-
 
 if __name__ == "__main__":
-    s = MyStr("hello")
-    s.get_user_name("null")
-    print(s)
+    s = MyStr("Hello, World!")
+    print(s, s.name, s.time)
